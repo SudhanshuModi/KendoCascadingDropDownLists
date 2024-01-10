@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "KendoCascadingDropDownLists";
+}
+
+<h1>Kendo Cascading DropDown Lists</h1>
+
+<div class="bg-secondary p-5 rounded-2 w-75 ms-5 mt-5" >
+    <input id="parent" class="p-1 mb-4" />
+    <input id="child" class="p-1" />
+    <button id="btn" class="btn btn-info mt-4">show</button>
+</div>
+<script>
+    $(document).ready(function () {
+        const companies = $("#parent").kendoDropDownList({
+            optionLabel: "Select companies...",
+            dataTextField: "companyName",
+            dataValueField: "companyId",
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "Home/CompanyDetails",
+                        dataType: "json",
+                    }
+                }
+            }
+        }).data("kendoDropDownList");
+        
+        const branch = $("#child").kendoDropDownList({
+            autoBind: false,
+            cascadeFrom: "parent",
+            cascadeFromField: "companyId",
+            optionLabel: "Select branch...",
+            dataTextField: "branchName",
+            dataValueField: "branchId",
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "Home/BranchDetails",
+                        dataType: "json",
+                    }
+                }
+            }
+        }).data("kendoDropDownList");
+
+        $("#btn").click(function () {
+            alert(`Company ${companies.text()} and Branch is ${branch.text()}`)
+        })
+    });
+</script>
+
